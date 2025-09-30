@@ -100,5 +100,3 @@ public class Client {
                 id, name, address, balance);
     }
 }
-
-
