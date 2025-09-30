@@ -113,10 +113,11 @@ public class ClientList {
     public List<WaitList> getWaitList() {
         List<WaitList> allWaitList = new ArrayList<>();
         for (Client c : clients.values()) {
-            allWaitList.addAll(c.getWaitList());
+            allWaitList.addAll(c.getWaitlist());
         }
         return allWaitList;
     }
 }
+
 
 
