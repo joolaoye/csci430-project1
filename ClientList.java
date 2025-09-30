@@ -39,7 +39,7 @@ public class ClientList {
         return null;
     }
 
-    public ArrayList<Client> getClients() {
-        return new ArrayList<Client>(this.clients);
+    public Iterator<Client> getClients() {
+        return this.clients.iterator();
     }
 }

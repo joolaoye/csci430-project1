@@ -3,10 +3,9 @@
 // StarID: ho7246ag
 // File: product.java
 // Purpose: This class contains all information pertaining to each product
-// that is within the product inventory.  
+// that is within the product inventory. 
 
-
-
+import java.util.UUID;
 
 public class Product {
     private String id;
@@ -14,18 +13,13 @@ public class Product {
     private int amount;
     private float salePrice;
 
+    public Product(String name, int amount, float salePrice) {
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
+        this.amount = amount;
+        this.salePrice = salePrice;
+    }
 
-    //Initializing.
-    public Product(String id, String name, int amount, float salePrice) {
-    this.id = id;
-    this.name = name;
-    this.amount = amount;
-    this.salePrice = salePrice;
-}
-
-
-
-    //GET Functions
     public String getId() {
         return id;
     }
@@ -44,9 +38,6 @@ public class Product {
     }
 
 
-
-
-    //SET Functions
     public void setName(String name) {
         this.name = name;
     }
@@ -60,9 +51,10 @@ public class Product {
     }
 
 
-    //Information display
    @Override
 public String toString() {
     return String.format("Product[%s] %s, Quantity: %d, Price: $%.2f",
             id, name, amount, salePrice);
+}
+
 }

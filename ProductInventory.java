@@ -6,33 +6,39 @@
 import java.util.*;
 
 public class ProductInventory {
-    private Map<String, Product> products;
+    private ArrayList<Product> products;
+    private static ProductInventory productInventory;
 
-    public ProductInventory() {
-        this.products = new HashMap<>();
+    private ProductInventory() {
+        this.products = new ArrayList<Product>();
     }
 
-    // 1. Inserting a new product
-    public Product insertProduct(String name, int amount, float salePrice) {
-        String uniqueId = UUID.randomUUID().toString();
-        Product product = new Product(uniqueId, name, amount, salePrice);
-        products.put(uniqueId, product);
-        return product;
+    public static ProductInventory instance() {
+        if (productInventory == null)
+            productInventory = new ProductInventory();
+        return productInventory;
     }
 
-
-    // 2. Get a specific product
-    public Product getProduct(String productId) {
-        return products.get(productId);
+    public boolean insertProduct(Product product) {
+        for (Product p : this .products) {
+            if (product.getId().equals(p.getId())) {
+                return false;
+            }
+        }
+        this.products.add(product);
+        return true;
     }
 
-    // 3. Get all products as an iterator
+    public Product searchProduct(String productId) {
+        for (Product p : this.products) {
+            if (p.getId().equals(productId)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public Iterator<Product> getProducts() {
-        return products.values().iterator();
-    }
-
-    // 4. Search for a product by ID (returns boolean)
-    public boolean searchProduct(String productId) {
-        return products.containsKey(productId);
+        return this.products.iterator();
     }
 }
