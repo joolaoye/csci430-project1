@@ -61,10 +61,6 @@ public class ClientList {
 
 
 
-
-
-
-
     //Searching fir a client by their name.
     public List<Client> searchByName(String name) {
         List<Client> result = new ArrayList<>();
@@ -110,4 +106,16 @@ public class ClientList {
         }
         return allWishlists;
     }
+
+
+
+    //Displays all items in a waitlist, similar to the wishlists.
+    public List<WaitList> getWaitList() {
+        List<WaitList> allWaitList = new ArrayList<>();
+        for (Client c : clients.values()) {
+            allWaitList.addAll(c.getWaitList());
+        }
+        return allWaitList;
+    }
 }
+
