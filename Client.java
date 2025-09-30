@@ -16,6 +16,9 @@ public class Client {
     private String address;
     private double balance;
 
+    private List<Wishlist> wishlists;
+    private List<Transaction> transactions;
+    private List<WaitList> waitlist;
 
     //Initializing.
     public Client(String id, String name, String address, double balance) {
@@ -25,6 +28,7 @@ public class Client {
     this.balance = balance;
     this.wishlists = new ArrayList<>();
     this.transactions = new ArrayList<>();
+    this.waitlist = new ArrayList<>();
 }
 
 
@@ -67,10 +71,6 @@ public class Client {
         this.balance += amount;
     }
 
-
-    private List<Wishlist> wishlists;
-    private List<Transaction> transactions;
-    private List<WaithtList> waitlist;
     
 
     //Relationship to wish lists (placeholder)
@@ -100,3 +100,7 @@ public class Client {
                 id, name, address, balance);
     }
 }
+
+
+
+
