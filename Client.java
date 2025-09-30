@@ -12,18 +12,18 @@ public class Client {
     private String name;
     private String address;
     private double balance;
-    private ArrayList<Item> wishlist;
+    private Wishlist wishlist;
     private ArrayList<Item> transactions;
-    private ArrayList<Item> waitlist;
+    private Waitlist waitlist;
 
     public Client(String name, String address) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.address = address;
         this.balance = 0.0;
-        this.wishlist = new ArrayList<Item>();
+        this.wishlist = new Wishlist();
         this.transactions = new ArrayList<Item>();
-        this.waitlist = new ArrayList<Item>();
+        this.waitlist = new Waitlist();
     }
 
     public String getId() {
@@ -55,11 +55,11 @@ public class Client {
         this.balance += amount;
     }
     
-    public ArrayList<Item> getWishlist() {
+    public Wishlist getWishlist() {
         return this.wishlist;
     }
 
-    public ArrayList<Item> getWaitlist() {
+    public Waitlist getWaitlist() {
         return this.waitlist;
     }
 

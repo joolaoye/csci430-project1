@@ -8,10 +8,17 @@ import java.util.*;
 
 public class ClientList {
     private ArrayList<Client> clients;
+    private static ClientList clientList;
 
-    public ClientList() {
+    private ClientList() {
         this.clients = new ArrayList<Client>();
     }
+
+    public static ClientList instance() {
+        if (clientList == null)
+            clientList = new ClientList();
+        return clientList;
+      }
 
     public boolean insertClient(Client client) {
         for (Client c : this.clients) {

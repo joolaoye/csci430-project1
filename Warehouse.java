@@ -3,15 +3,16 @@ import java.util.*;
 public class Warehouse {
     private ClientList clients;
     private ProductInventory products;
+    private static Warehouse warehouse;
 
-    private static Warehouse obj;
+    private Warehouse() {
+        this.clients = ClientList.instance();
+    }
 
-    private Warehouse() {}
-
-    public static Warehouse getInstance() {
-        if (obj == null)
-            obj = new Warehouse();
-        return obj;
+    public static Warehouse instance() {
+        if (warehouse == null)
+            warehouse = new Warehouse();
+        return warehouse;
     }
 
     public Client addClient(String name, String address) {
@@ -32,15 +33,16 @@ public class Warehouse {
     }
 
     public Client searchClient(String clientID) {
-        return clients.getClient(clientID);
+        return clients.searchClient(clientID);
     }
 
     public ArrayList<Client> getClients() {
         return this.clients.getClients();
     }
 
-    public Iterator getWishlist(String clientID) {
-        Client client = clients.getClient(clientID);
-        return client.getWishlists();
+    public Iterator<Item> getWishlist(String clientID) {
+        Client client = clients.searchClient(clientID);
+        Wishlist wishlist =  client.getWishlist();
+        return wishlist.getItems();
     }
 }

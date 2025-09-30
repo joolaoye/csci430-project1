@@ -5,12 +5,12 @@ public class Wishlist {
     private ArrayList<Item> items;
 
     public Wishlist() {
-        items = new ArrayList<>();
+        items = new ArrayList<Item>();
     }
 
     public boolean findItem(String productId) {
         for (Item item : items) {
-            if (item.getId(productId).equals(productId)) {
+            if (item.getProductId().equals(productId)) {
                 return true;
             }
         }
