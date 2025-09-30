@@ -9,4 +9,10 @@ public class UserInterface {
     private static final int EXIT = 0;
     private static final int ADD_CLIENT = 1;
     private static final int ADD_PRODUCTS = 2;
+
+    public static UserInterface instance() {
+        if (userInterface == null)
+            userInterface = new UserInterface();
+        return userInterface;
+      }
 }
