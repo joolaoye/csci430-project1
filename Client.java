@@ -70,7 +70,7 @@ public class Client {
 
     private List<Wishlist> wishlists;
     private List<Transaction> transactions;
-    private List<WaithtList> waitlist;
+    private List<WaitList> waitlist;
     
 
     //Relationship to wish lists (placeholder)
@@ -100,5 +100,6 @@ public class Client {
                 id, name, address, balance);
     }
 }
+
 
 
