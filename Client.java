@@ -69,6 +69,15 @@ public class Client {
     }
 
 
+
+
+    //Relationship with waitlist (placeholder)
+    public List<WaitList> getWaitlist() {
+        return new ArrayList<>(waitlist);
+    }
+
+
+    
     //Relationship to transactions (placeholder)
     public List<Transaction> getTransactions() {
         return new ArrayList<>(transactions);
@@ -81,3 +90,4 @@ public class Client {
                 id, name, address, balance);
     }
 }
+
