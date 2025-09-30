@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Warehouse {
     private ClientList clients;
     private ProductInventory products;
@@ -12,13 +14,33 @@ public class Warehouse {
         return obj;
     }
 
-    public boolean addClient(String name, String address, float balance) {
-       return true;
+    public Client addClient(String name, String address) {
+        if (name == null || name.isBlank() || address == null || address.isBlank()) {
+            return null;
+        }
+
+        Client newcClient = new Client(name, address);
+        if (clients.insertClient(newcClient)) {
+            return newcClient;
+        }
+        
+        return null;
     }
 
-    public boolean addProduct(String name, float SalePrice, int amount) {
-        return true;
+    public Product addProduct(String name, float salePrice, int amount) {
+        return products.addProduct(name, salePrice, amount);
     }
 
-    
+    public Client searchClient(String clientID) {
+        return clients.getClient(clientID);
+    }
+
+    public ArrayList<Client> getClients() {
+        return this.clients.getClients();
+    }
+
+    public Iterator getWishlist(String clientID) {
+        Client client = clients.getClient(clientID);
+        return client.getWishlists();
+    }
 }

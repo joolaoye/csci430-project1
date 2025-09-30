@@ -4,40 +4,28 @@
 // File: Client.java
 // Purpose: This class contains all information pertaining to each user. 
 
-
-
-import java.util.List;
-import java.util.ArrayList; 
-
+import java.util.ArrayList;
+import java.util.UUID; 
 
 public class Client {
     private String id;
     private String name;
     private String address;
     private double balance;
+    private ArrayList<Item> wishlist;
+    private ArrayList<Item> transactions;
+    private ArrayList<Item> waitlist;
 
-    private List<Wishlist> wishlists;
-    private List<Transaction> transactions;
-    private List<WaitList> waitlist;
-
-    //Initializing.
-    public Client(String id, String name, String address, double balance) {
-    this.id = id;
-    this.name = name;
-    this.address = address;
-    this.balance = balance;
-    this.wishlists = new ArrayList<>();
-    this.transactions = new ArrayList<>();
-    this.waitlist = new ArrayList<>();
-}
-
-
-    public Client(String id, String name, String address) {
-        this(id, name, address, 0.0);
+    public Client(String name, String address) {
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
+        this.address = address;
+        this.balance = 0.0;
+        this.wishlist = new ArrayList<Item>();
+        this.transactions = new ArrayList<Item>();
+        this.waitlist = new ArrayList<Item>();
     }
 
-
-    //GET Functions
     public String getId() {
         return id;
     }
@@ -55,10 +43,6 @@ public class Client {
         return balance;
     }
 
-
-
-
-    //SET Functions
     public void setName(String name) {
         this.name = name;
     }
@@ -70,37 +54,22 @@ public class Client {
     public void updateBalance(double amount) {
         this.balance += amount;
     }
-
     
-
-    //Relationship to wish lists (placeholder)
-    public List<Wishlist> getWishlists() {
-        return new ArrayList<>(wishlists);
+    public ArrayList<Item> getWishlist() {
+        return this.wishlist;
     }
 
-
-
-
-    //Relationship with waitlist (placeholder)
-    public List<WaitList> getWaitlist() {
-        return new ArrayList<>(waitlist);
+    public ArrayList<Item> getWaitlist() {
+        return this.waitlist;
     }
 
-
-    
-    //Relationship to transactions (placeholder)
-    public List<Transaction> getTransactions() {
-        return new ArrayList<>(transactions);
+    public ArrayList<Item> getTransactions() {
+        return this.transactions;
     }
 
-    //Information display
     @Override
     public String toString() {
         return String.format("Client[%s] %s, %s, Balance: $%.2f",
                 id, name, address, balance);
     }
 }
-
-
-
-
