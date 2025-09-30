@@ -26,4 +26,10 @@ public class Item {
     public void updateQuantity(int value) {
         this.quantity += value;
     }
+
+    @Override
+public String toString() {
+    return String.format("Product ID: %s, Quantity: %d",
+            productId, quantity);
+}
 }
