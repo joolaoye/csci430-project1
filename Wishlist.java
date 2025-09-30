@@ -8,21 +8,21 @@ public class Wishlist {
         items = new ArrayList<Item>();
     }
 
-    public boolean findItem(String productId) {
+    public Item findItem(String productId) {
         for (Item item : items) {
             if (item.getProductId().equals(productId)) {
-                return true;
+                return item;
             }
         }
-        return false;
+        return null;
     }
 
-    public boolean insertItem(String productId, int quantity) {
-        items.add(new Item(productId, quantity));
+    public boolean insertItem(Item item) {
+        items.add(item);
         return true;
     }
 
-    public Iterator<Item> getItems() {
+    public Iterator<Item> getProducts() {
         return items.iterator();
     }
 }
