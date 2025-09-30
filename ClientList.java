@@ -28,7 +28,7 @@ public class ClientList {
 
 
 
-    Used to delete a particular client.
+    //Used to delete a particular client.
     public void deleteClient(String clientId) {
         if (!clients.containsKey(clientId)) {
             throw new NoSuchElementException("No client with ID " + clientId + " found.");
@@ -45,13 +45,13 @@ public class ClientList {
 
 
 
-    Used to get a particular client.
+    //Used to get a particular client.
     public Client getClient(String clientId) {
         return clients.get(clientId);
     }
     
 
-    Used to display all clients.
+    //Used to display all clients.
     public List<Client> listClients() {
         return new ArrayList<>(clients.values());
     }
@@ -111,3 +111,4 @@ public class ClientList {
         return allWishlists;
     }
 }
+
