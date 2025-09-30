@@ -1,22 +1,22 @@
 public class Item {
-    private String productID;
+    private String productId;
     private int quantity;
 
-    public Item(String productID, int quantity) {
-        this.productID = productID;
+    public Item(String productId, int quantity) {
+        this.productId = productId;
         this.quantity = quantity;
     }
 
-    public String getProductID() {
-        return this.productID;
+    public String getProductId() {
+        return this.productId;
     }
 
     public int getQuantity() {
         return this.quantity;
     }
 
-    public void setProductID(String value) {
-        this.productID = value;
+    public void setProductId(String value) {
+        this.productId = value;
     }
 
     public void setQuantity(int value) {
