@@ -7,107 +7,32 @@
 import java.util.*;
 
 public class ClientList {
-    private Map<String, Client> clients;
+    private ArrayList<Client> clients;
 
     public ClientList() {
-        this.clients = new HashMap<>();
+        this.clients = new ArrayList<Client>();
     }
 
-
-    //Adding a client to the list.
-    public Client addClient(String name, String address) {
-        String uniqueId = UUID.randomUUID().toString();
-        Client client = new Client(uniqueId, name, address, 0.0);
-        clients.put(uniqueId, client);
-        return client;
-    }
-
-
-
-
-
-
-
-    //Used to delete a particular client.
-    public void deleteClient(String clientId) {
-        if (!clients.containsKey(clientId)) {
-            throw new NoSuchElementException("No client with ID " + clientId + " found.");
-        }
-        clients.remove(clientId);
-    }
-
-
-
-
-
-
-
-
-
-
-    //Used to get a particular client.
-    public Client getClient(String clientId) {
-        return clients.get(clientId);
-    }
-    
-
-    //Used to display all clients.
-    public List<Client> listClients() {
-        return new ArrayList<>(clients.values());
-    }
-
-
-
-
-
-
-
-
-
-
-    //Searching fir a client by their name.
-    public List<Client> searchByName(String name) {
-        List<Client> result = new ArrayList<>();
-        for (Client c : clients.values()) {
-            if (c.getName().equalsIgnoreCase(name)) {
-                result.add(c);
+    public boolean insertClient(Client client) {
+        for (Client c : this.clients) {
+            if (client.getId().equals(c.getId())) {
+                return false;
             }
         }
-        return result;
+        this.clients.add(client);
+        return true;
     }
 
-
-
-
-
-
-
-
-
-
-
-    //Gets transactions through the client and shows all transactions a client has ever conducted.
-    public List<Transaction> getAllTransactions() {
-        List<Transaction> allTransactions = new ArrayList<>();
-        for (Client c : clients.values()) {
-            allTransactions.addAll(c.getTransactions());
+    public Client searchClient(String clientId) {
+        for (Client c : this.clients) {
+            if (c.getId().equals(clientId)) {
+                return c;
+            }
         }
-        return allTransactions;
+        return null;
     }
 
-
-
-
-
-
-
-
-    //Displays all items on a client's wish list based on the relationship between the client and their wish list.
-    public List<Wishlist> getAllWishlists() {
-        List<Wishlist> allWishlists = new ArrayList<>();
-        for (Client c : clients.values()) {
-            allWishlists.addAll(c.getWishlists());
-        }
-        return allWishlists;
+    public ArrayList<Client> getClients() {
+        return new ArrayList<Client>(this.clients);
     }
 }
