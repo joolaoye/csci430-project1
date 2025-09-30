@@ -5,6 +5,11 @@
 // Purpose: This class contains all information pertaining to each user. 
 
 
+
+import java.util.List;
+import java.util.ArrayList; 
+
+
 public class Client {
     private String id;
     private String name;
@@ -14,11 +19,13 @@ public class Client {
 
     //Initializing.
     public Client(String id, String name, String address, double balance) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.balance = balance;
-    }
+    this.id = id;
+    this.name = name;
+    this.address = address;
+    this.balance = balance;
+    this.wishlists = new ArrayList<>();
+    this.transactions = new ArrayList<>();
+}
 
 
     public Client(String id, String name, String address) {
@@ -61,7 +68,10 @@ public class Client {
     }
 
 
-
+    private List<Wishlist> wishlists;
+    private List<Transaction> transactions;
+    private List<WaithtList> waitlist;
+    
 
     //Relationship to wish lists (placeholder)
     public List<Wishlist> getWishlists() {
@@ -90,4 +100,5 @@ public class Client {
                 id, name, address, balance);
     }
 }
+
 
