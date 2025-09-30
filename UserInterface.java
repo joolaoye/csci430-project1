@@ -12,9 +12,9 @@ public class UserInterface {
     private static final int ADD_PRODUCT = 2;
     private static final int SEARCH_CLIENT = 3;
     private static final int SEARCH_PRODUCT = 4;
-    private static final int VIEW_CLIENTS = 5;
-    private static final int VIEW_PRODUCTS = 6;
-    private static final int VIEW_WISHLIST = 7;
+    private static final int GET_CLIENTS = 5;
+    private static final int GET_PRODUCTS = 6;
+    private static final int GET_WISHLIST = 7;
     private static final int ADD_TO_WISHLIST = 8;
 
     private UserInterface() {
@@ -52,14 +52,14 @@ public class UserInterface {
                 case SEARCH_PRODUCT:
                     searchProduct();
                     break;
-                case VIEW_CLIENTS:
-                    viewClients();
+                case GET_CLIENTS:
+                    getClients();
                     break;
-                case VIEW_PRODUCTS:
-                    viewProducts();
+                case GET_PRODUCTS:
+                    getProducts();
                     break;
-                case VIEW_WISHLIST:
-                    viewWishlist();
+                case GET_WISHLIST:
+                    getWishlist();
                     break;
                 case ADD_TO_WISHLIST:
                     addToWishlist();
@@ -79,9 +79,9 @@ public class UserInterface {
         System.out.println(ADD_PRODUCT + " : Add Product");
         System.out.println(SEARCH_CLIENT + " : Search Client by ID");
         System.out.println(SEARCH_PRODUCT + " : Search Product by ID");
-        System.out.println(VIEW_CLIENTS + " : View All Clients");
-        System.out.println(VIEW_PRODUCTS + " : View All Products");
-        System.out.println(VIEW_WISHLIST + " : View Client Wishlist");
+        System.out.println(GET_CLIENTS + " : Get All Clients");
+        System.out.println(GET_PRODUCTS + " : Get All Products");
+        System.out.println(GET_WISHLIST + " : Get Client Wishlist");
         System.out.println(ADD_TO_WISHLIST + " : Add Product to Client Wishlist");
         System.out.println(EXIT + " : Exit");
     }
@@ -165,7 +165,7 @@ public class UserInterface {
         }
     }
 
-    private void viewClients() {
+    private void getClients() {
         Iterator<Client> iterator = warehouse.getClients();
         if (!iterator.hasNext()) {
             System.out.println("No clients found.");
@@ -177,7 +177,7 @@ public class UserInterface {
         }
     }
 
-    private void viewProducts() {
+    private void getProducts() {
         Iterator<Product> iterator = warehouse.getProducts();
         if (!iterator.hasNext()) {
             System.out.println("No products found.");
@@ -189,21 +189,26 @@ public class UserInterface {
         }
     }
 
-    private void viewWishlist() {
+    private void getWishlist() {
         try {
             System.out.print("Enter client ID: ");
             String clientId = reader.readLine().trim();
             Wishlist wishlist = warehouse.getWishlist(clientId);
 
-            if (wishlist == null || wishlist.getItems().isEmpty()) {
+            if (wishlist == null || !(wishlist.getProducts().hasNext())) {
                 System.out.println("Wishlist is empty or client not found.");
                 return;
             }
 
             System.out.println("--- Wishlist ---");
-            for (Item item : wishlist.getItems()) {
+
+            Iterator<Item> it  = wishlist.getProducts();
+
+            while (it.hasNext()) {
+                Item item = it.next();
                 System.out.println(item);
             }
+
         } catch (IOException e) {
             System.out.println("Error reading input.");
         }
