@@ -25,6 +25,7 @@ public class Client {
     this.balance = balance;
     this.wishlists = new ArrayList<>();
     this.transactions = new ArrayList<>();
+    this.waitlist = new ArrayList<>();
 }
 
 
@@ -100,6 +101,7 @@ public class Client {
                 id, name, address, balance);
     }
 }
+
 
 
 
