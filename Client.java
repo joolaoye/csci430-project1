@@ -14,7 +14,6 @@ public class Client {
     private double balance;
     private Wishlist wishlist;
     private ArrayList<Item> transactions;
-    private Waitlist waitlist;
 
     public Client(String name, String address) {
         this.id = UUID.randomUUID().toString();
@@ -23,7 +22,6 @@ public class Client {
         this.balance = 0.0;
         this.wishlist = new Wishlist();
         this.transactions = new ArrayList<Item>();
-        this.waitlist = new Waitlist();
     }
 
     public String getId() {
@@ -57,10 +55,6 @@ public class Client {
     
     public Wishlist getWishlist() {
         return this.wishlist;
-    }
-
-    public Waitlist getWaitlist() {
-        return this.waitlist;
     }
 
     public ArrayList<Item> getTransactions() {

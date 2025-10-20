@@ -12,12 +12,14 @@ public class Product {
     private String name;
     private int amount;
     private float salePrice;
+    private Waitlist waitlist;
 
     public Product(String name, int amount, float salePrice) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.amount = amount;
         this.salePrice = salePrice;
+        this.waitlist = new Waitlist();
     }
 
     public String getId() {
@@ -50,11 +52,13 @@ public class Product {
         this.salePrice = salePrice;
     }
 
+    public Waitlist getWaitlist() {
+        return this.waitlist;
+    }
 
    @Override
-public String toString() {
-    return String.format("Product[%s] %s, Quantity: %d, Price: $%.2f",
-            id, name, amount, salePrice);
-}
-
+    public String toString() {
+        return String.format("Product[%s] %s, Quantity: %d, Price: $%.2f",
+                id, name, amount, salePrice);
+    }
 }

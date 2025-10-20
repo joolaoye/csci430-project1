@@ -2,14 +2,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Wishlist {
-    private ArrayList<Item> items;
+    private ArrayList<WishlistItem> items;
 
     public Wishlist() {
-        items = new ArrayList<Item>();
+        items = new ArrayList<WishlistItem>();
     }
 
-    public Item findItem(String productId) {
-        for (Item item : items) {
+    public WishlistItem findItem(String productId) {
+        for (WishlistItem item : items) {
             if (item.getProductId().equals(productId)) {
                 return item;
             }
@@ -17,12 +17,12 @@ public class Wishlist {
         return null;
     }
 
-    public boolean insertItem(Item item) {
+    public boolean insertItem(WishlistItem item) {
         items.add(item);
         return true;
     }
 
-    public Iterator<Item> getProducts() {
+    public Iterator<WishlistItem> getProducts() {
         return items.iterator();
     }
 }

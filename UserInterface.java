@@ -202,7 +202,7 @@ public class UserInterface {
 
             System.out.println("--- Wishlist ---");
 
-            Iterator<Item> it  = wishlist.getProducts();
+            Iterator<WishlistItem> it  = wishlist.getProducts();
 
             while (it.hasNext()) {
                 Item item = it.next();
