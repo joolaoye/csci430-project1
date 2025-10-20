@@ -82,13 +82,13 @@ public class Warehouse {
                 return response;
             }
 
-            Item item = wishlist.findItem(productId);
+            WishlistItem item = wishlist.findItem(productId);
 
             if (item != null) {
                 item.updateQuantity(quantity);
             }
             else {
-                item = new Item(productId, quantity);
+                item = new WishlistItem(productId, quantity);
                 wishlist.insertItem(item);
             }
 
