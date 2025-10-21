@@ -21,6 +21,7 @@ public class UserInterface {
     //These can be changed around as you see fit.
     private static final int GET_CLIENT_BALANCE = 9;
     private static final int ADD_CLIENT_BALANCE = 10;
+    private static final int GET_PRODUCT_QUANTITY = 11;
 
     
     private UserInterface() {
@@ -78,6 +79,9 @@ public class UserInterface {
                 case ADD_CLIENT_BALANCE:
                     addClientBalance();
                     break;
+                case GET_PRODUCT_QUANTITY:
+                    getProductQuantity();
+                    break;
 
                     
                 case EXIT:
@@ -103,6 +107,7 @@ public class UserInterface {
         //Added my menu options at the bottom here.
         System.out.println(GET_CLIENT_BALANCE + " : Get Client Balance");
         System.out.println(ADD_CLIENT_BALANCE + " : Add to a Client Balance");
+        System.out.println(GET_PRODUCT_QUANTITY + " : Get Product Quantity");
         
         System.out.println(EXIT + " : Exit");
     }
@@ -295,5 +300,19 @@ public class UserInterface {
             System.out.println("Invalid input.");
         }
     }
+    private void getProductQuantity() {
+        try {
+            System.out.print("Enter product ID: ");
+            String id = reader.readLine().trim();
+            Product product = warehouse.searchProduct(id);
 
+            if (product != null) {
+                System.out.printf("Product %s (%s) has %d units in stock.%n", product.getName(), prod>
+            } else {
+                System.out.println("Product not found.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading input.");
+        }
+}
 }
