@@ -95,6 +95,21 @@ public class Warehouse {
 
         return response;
     }
+
+    public InvoiceItem order(String productId, int quantity, String clientId) {
+        Product product = this.searchProduct(productId);
+        InvoiceItem invoiceItem = null;
+
+        if (quantity > product.getAmount()) {
+            invoiceItem = new InvoiceItem(product.getAmount(), product.getName(), product.getSalePrice());
+            product.updateQuantity(-product.getAmount());
+            // Add the remaining quantity to the product's waitlist
+        } else {
+            invoiceItem = new InvoiceItem(quantity, product.getName(), product.getSalePrice());
+            product.updateQuantity(-quantity);
+        }
+
+        return invoiceItem;
     
     public void receivePayment(String clientId, double amount) {
         Client client = clients.searchClient(clientId);

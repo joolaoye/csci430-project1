@@ -56,6 +56,10 @@ public class Product {
         return this.waitlist;
     }
 
+    public void updateQuantity(int quantity) {
+        this.amount += quantity;
+    }
+
    @Override
     public String toString() {
         return String.format("Product[%s] %s, Quantity: %d, Price: $%.2f",

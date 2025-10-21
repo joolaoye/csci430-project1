@@ -22,7 +22,18 @@ public class Wishlist {
         return true;
     }
 
-    public Iterator<WishlistItem> getProducts() {
+    public boolean removeItem(WishlistItem item) {
+        for (WishlistItem it : items) {
+            if (item.getProductId().equals(it.getProductId())) {
+                items.remove(it);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Iterator<WishlistItem> getItems() {
         return items.iterator();
     }
 }
