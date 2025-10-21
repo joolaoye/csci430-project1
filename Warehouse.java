@@ -25,7 +25,6 @@ public class Warehouse {
         if (this.clients.insertClient(newClient)) {
             return newClient;
         }
-        
         return null;
     }
 
@@ -33,12 +32,11 @@ public class Warehouse {
         if (name == null || name.isBlank() || salePrice <= 0 || amount <= 0) {
             return null;
         }
-        
+
         Product newProduct = new Product(name, amount, salePrice);
         if (this.products.insertProduct(newProduct)) {
             return newProduct;
         }
-
         return null;
     }
 
@@ -70,14 +68,12 @@ public class Warehouse {
         try {
             Product product = this.searchProduct(productId);
             if (product == null) {
-                response.put("status", "failure");
                 response.put("message", "Product not found");
                 return response;
             }
 
             Wishlist wishlist = this.getWishlist(clientId);
             if (wishlist == null) {
-                response.put("status", "failure");
                 response.put("message", "Client not found");
                 return response;
             }
@@ -86,20 +82,28 @@ public class Warehouse {
 
             if (item != null) {
                 item.updateQuantity(quantity);
-            }
-            else {
+            } else {
                 item = new WishlistItem(productId, quantity);
                 wishlist.insertItem(item);
             }
 
             response.put("status", "success");
             response.put("current_quantity", item.getQuantity());
-        }
-        catch (Exception e) {
-            response.put("status", "failure");
+        } catch (Exception e) {
             response.put("message", e.getMessage());
         }
 
         return response;
+    }
+    
+    public void receivePayment(String clientId, double amount) {
+        Client client = clients.searchClient(clientId);
+        if (client != null) {
+            client.pay(amount);
+            System.out.println("Payment of $" + amount + " received from " + client.getName());
+            System.out.println("Updated balance: $" + client.getBalance());
+        } else {
+            System.out.println("Client not found.");
+        }
     }
 }
