@@ -16,7 +16,8 @@ public class UserInterface {
     private static final int GET_PRODUCTS = 6;
     private static final int GET_WISHLIST = 7;
     private static final int ADD_TO_WISHLIST = 8;
-    private static final int RECEIVE_SHIPMENT = 9; // New option
+    private static final int PROCESS_CLIENT_ORDER = 9; 
+    private static final int RECEIVE_SHIPMENT = 10; //New option
 
     private UserInterface() {
         warehouse = Warehouse.instance();
@@ -68,6 +69,9 @@ public class UserInterface {
                 case RECEIVE_SHIPMENT:
                     receiveShipment(); // New case
                     break;
+                case PROCESS_CLIENT_ORDER:
+                    processClientOrder();
+                    break;
                 case EXIT:
                     System.out.println("Exiting the program.");
                     break;
@@ -88,6 +92,7 @@ public class UserInterface {
         System.out.println(GET_WISHLIST + " : Get Client Wishlist");
         System.out.println(ADD_TO_WISHLIST + " : Add Product to Client Wishlist");
         System.out.println(RECEIVE_SHIPMENT + " : Receive Shipment"); // New option
+        System.out.println(PROCESS_CLIENT_ORDER + " : Process Client Order");
         System.out.println(EXIT + " : Exit");
     }
 
