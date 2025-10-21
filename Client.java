@@ -37,7 +37,6 @@ public class Client {
     }
 
     public double getBalance() {
-
         return balance;
     }
 
@@ -52,7 +51,16 @@ public class Client {
     public void updateBalance(double amount) {
         this.balance += amount;
     }
-    
+
+    public void pay(double amount) {
+        if (amount > 0) {
+            this.balance -= amount;
+            System.out.println("Payment of $" + amount + " applied to client: " + this.name);
+        } else {
+            System.out.println("Invalid payment amount. Payment must be greater than zero.");
+        }
+    }
+
     public Wishlist getWishlist() {
         return this.wishlist;
     }
