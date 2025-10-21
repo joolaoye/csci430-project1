@@ -33,7 +33,7 @@ public class Product {
 
     public Waitlist getWaitlist() { return this.waitlist; }
 
-    public void increaseQuantity(int quantity) {
+    public void updateQuantity(int quantity) {
         this.amount += quantity;
     }
 
