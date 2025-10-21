@@ -6,6 +6,10 @@ public class UserInterface {
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static Warehouse warehouse;
 
+    private static final String PURCHASE = "Purchase";
+    private static final String REMOVE = "Remove";
+    private static final String LEAVE = "Leave";
+
     // Menu options
     private static final int EXIT = 0;
     private static final int ADD_CLIENT = 1;
@@ -16,6 +20,7 @@ public class UserInterface {
     private static final int GET_PRODUCTS = 6;
     private static final int GET_WISHLIST = 7;
     private static final int ADD_TO_WISHLIST = 8;
+    private static final int PROCESS_CLIENT_ORDER = 9;
 
     private UserInterface() {
         warehouse = Warehouse.instance();
@@ -64,6 +69,9 @@ public class UserInterface {
                 case ADD_TO_WISHLIST:
                     addToWishlist();
                     break;
+                case PROCESS_CLIENT_ORDER:
+                    processClientOrder();
+                    break;
                 case EXIT:
                     System.out.println("Exiting the program.");
                     break;
@@ -83,6 +91,7 @@ public class UserInterface {
         System.out.println(GET_PRODUCTS + " : Get All Products");
         System.out.println(GET_WISHLIST + " : Get Client Wishlist");
         System.out.println(ADD_TO_WISHLIST + " : Add Product to Client Wishlist");
+        System.out.println(PROCESS_CLIENT_ORDER + " : Process Client Order");
         System.out.println(EXIT + " : Exit");
     }
 
@@ -195,14 +204,14 @@ public class UserInterface {
             String clientId = reader.readLine().trim();
             Wishlist wishlist = warehouse.getWishlist(clientId);
 
-            if (wishlist == null || !(wishlist.getProducts().hasNext())) {
+            if (wishlist == null || !(wishlist.getItems().hasNext())) {
                 System.out.println("Wishlist is empty or client not found.");
                 return;
             }
 
             System.out.println("--- Wishlist ---");
 
-            Iterator<WishlistItem> it  = wishlist.getProducts();
+            Iterator<WishlistItem> it  = wishlist.getItems();
 
             while (it.hasNext()) {
                 Item item = it.next();
@@ -229,6 +238,56 @@ public class UserInterface {
             } else {
                 System.out.println("Failed to add to wishlist: " + response.get("message"));
             }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Invalid input.");
+        }
+    }
+
+    private void processClientOrder() {
+        try {
+            System.out.print("Enter Client ID: ");
+            String clientId = reader.readLine().trim();
+
+            Client client = warehouse.searchClient(clientId);
+            Invoice invoice = new Invoice(clientId);
+
+            if (client != null) {
+                Wishlist wishlist = client.getWishlist();
+                Iterator<WishlistItem> iterator = wishlist.getItems();
+                if (!iterator.hasNext()) {
+                    System.out.println("Wishlist is empty");
+                    return;
+                }
+                System.out.println(("--- Wishlist Items ---"));
+                while (iterator.hasNext()) {
+                    WishlistItem item = iterator.next();
+                    System.out.println(item);
+                    System.out.println("Purchase / Remove / Leave");
+                    System.out.print("Enter response: ");
+                    String response = reader.readLine().trim();
+
+                    switch (response) {
+                        case PURCHASE:
+                            System.out.print("Enter quantity to be ordered: ");
+                            int quantity = Integer.parseInt(reader.readLine());
+                            InvoiceItem invoiceItem = warehouse.order(item.getProductId(), quantity, clientId);
+                            invoice.addItem(invoiceItem);
+                            iterator.remove();
+                            break;
+                        case REMOVE:
+                            iterator.remove();
+                            break;
+                        case LEAVE:
+                            break;
+                    }
+                }
+            } else {
+                System.out.println("Client not found. Exit");
+                return;
+            }
+
+            System.out.println(invoice.render());
+        
         } catch (IOException | NumberFormatException e) {
             System.out.println("Invalid input.");
         }
