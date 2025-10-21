@@ -31,6 +31,7 @@ public class Warehouse {
         if (name == null || name.isBlank() || salePrice <= 0 || amount <= 0) {
             return null;
         }
+
         Product newProduct = new Product(name, amount, salePrice);
         if (this.products.insertProduct(newProduct)) {
             return newProduct;
@@ -80,7 +81,7 @@ public class Warehouse {
             if (item != null) {
                 item.updateQuantity(quantity);
             } else {
-                item = new WishlistItem(clientId, quantity);
+                item = new WishlistItem(productId, quantity);
                 wishlist.insertItem(item);
             }
 
@@ -129,5 +130,30 @@ public class Warehouse {
 
     public void order(String clientId, String productId, int quantity) {
         // To be implemented later
+    }
+    public InvoiceItem order(String productId, int quantity, String clientId) {
+        Product product = this.searchProduct(productId);
+        InvoiceItem invoiceItem = null;
+
+        if (quantity > product.getAmount()) {
+            invoiceItem = new InvoiceItem(product.getAmount(), product.getName(), product.getSalePrice());
+            product.updateQuantity(-product.getAmount());
+            // Add the remaining quantity to the product's waitlist
+        } else {
+            invoiceItem = new InvoiceItem(quantity, product.getName(), product.getSalePrice());
+            product.updateQuantity(-quantity);
+        }
+
+        return invoiceItem;
+    
+    public void receivePayment(String clientId, double amount) {
+        Client client = clients.searchClient(clientId);
+        if (client != null) {
+            client.pay(amount);
+            System.out.println("Payment of $" + amount + " received from " + client.getName());
+            System.out.println("Updated balance: $" + client.getBalance());
+        } else {
+            System.out.println("Client not found.");
+        }
     }
 }

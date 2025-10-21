@@ -37,7 +37,8 @@ public class Product {
         this.amount += quantity;
     }
 
-    @Override
+
+   @Override
     public String toString() {
         return String.format("Product[%s] %s, Quantity: %d, Price: $%.2f", id, name, amount, salePrice);
     }
