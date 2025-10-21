@@ -17,6 +17,12 @@ public class UserInterface {
     private static final int GET_WISHLIST = 7;
     private static final int ADD_TO_WISHLIST = 8;
 
+    //Carson: I added some menu options for the balance.
+    //These can be changed around as you see fit.
+    private static final int GET_CLIENT_BALANCE = 9;
+    private static final int ADD_CLIENT_BALANCE = 10;
+
+    
     private UserInterface() {
         warehouse = Warehouse.instance();
     }
@@ -64,6 +70,16 @@ public class UserInterface {
                 case ADD_TO_WISHLIST:
                     addToWishlist();
                     break;
+
+                //Carson: Added my own methods to the switch block.
+                case GET_CLIENT_BALANCE:
+                    getClientBalance();
+                    break;
+                case ADD_CLIENT_BALANCE:
+                    addClientBalance();
+                    break;
+
+                    
                 case EXIT:
                     System.out.println("Exiting the program.");
                     break;
@@ -83,6 +99,11 @@ public class UserInterface {
         System.out.println(GET_PRODUCTS + " : Get All Products");
         System.out.println(GET_WISHLIST + " : Get Client Wishlist");
         System.out.println(ADD_TO_WISHLIST + " : Add Product to Client Wishlist");
+        
+        //Added my menu options at the bottom here.
+        System.out.println(GET_CLIENT_BALANCE + " : Get Client Balance");
+        System.out.println(ADD_CLIENT_BALANCE + " : Add to a Client Balance");
+        
         System.out.println(EXIT + " : Exit");
     }
 
@@ -233,4 +254,46 @@ public class UserInterface {
             System.out.println("Invalid input.");
         }
     }
+
+
+
+ //Carson: Added my own voids for my methods down here.
+    //I appreciet the framework!
+    private void getClientBalance() {
+        try {
+            System.out.print("Enter client ID: ");
+            String id = reader.readLine().trim();
+            Client client = warehouse.searchClient(id);
+
+            if (client != null) {
+                System.out.printf("Client %s (%s) has a balance of: $%.2f%n", client.getName(), clien>
+            } else {
+                System.out.println("Client not found.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading input.");
+        }
+    }
+
+    private void addClientBalance() {
+        try {
+            System.out.print("Enter client ID: ");
+            String id = reader.readLine().trim();
+            Client client = warehouse.searchClient(id);
+
+            if (client == null) {
+                System.out.println("Client not found.");
+                return;
+            }
+
+            System.out.print("Enter amount to add: ");
+            double amount = Double.parseDouble(reader.readLine());
+
+            client.updateBalance(amount);
+            System.out.printf("Balance updated. You will be billed by main. New balance for %s: $%.2f>
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Invalid input.");
+        }
+    }
+
 }
