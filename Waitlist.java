@@ -21,8 +21,17 @@ public class Waitlist {
         items.add(item);
         return true;
     }
-   
+
     public Iterator<WaitlistItem> getItems() {
         return items.iterator();
+    }
+
+    // New helper methods
+    public void removeItem(WaitlistItem item) {
+        items.remove(item);
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
     }
 }
