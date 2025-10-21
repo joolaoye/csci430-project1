@@ -128,9 +128,7 @@ public class Warehouse {
         }
     }
 
-    public void order(String clientId, String productId, int quantity) {
-        // To be implemented later
-    }
+   
     public InvoiceItem order(String productId, int quantity, String clientId) {
         Product product = this.searchProduct(productId);
         InvoiceItem invoiceItem = null;
