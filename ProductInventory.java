@@ -20,7 +20,7 @@ public class ProductInventory {
     }
 
     public boolean insertProduct(Product product) {
-        for (Product p : this .products) {
+        for (Product p : this.products) {
             if (product.getId().equals(p.getId())) {
                 return false;
             }
@@ -40,5 +40,13 @@ public class ProductInventory {
 
     public Iterator<Product> getProducts() {
         return this.products.iterator();
+    }
+
+    // New helper
+    public void updateProductQuantity(String productId, int additionalQuantity) {
+        Product product = searchProduct(productId);
+        if (product != null) {
+            product.increaseQuantity(additionalQuantity);
+        }
     }
 }

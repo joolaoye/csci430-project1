@@ -20,12 +20,10 @@ public class Warehouse {
         if (name == null || name.isBlank() || address == null || address.isBlank()) {
             return null;
         }
-
         Client newClient = new Client(name, address);
         if (this.clients.insertClient(newClient)) {
             return newClient;
         }
-        
         return null;
     }
 
@@ -33,12 +31,10 @@ public class Warehouse {
         if (name == null || name.isBlank() || salePrice <= 0 || amount <= 0) {
             return null;
         }
-        
         Product newProduct = new Product(name, amount, salePrice);
         if (this.products.insertProduct(newProduct)) {
             return newProduct;
         }
-
         return null;
     }
 
@@ -70,36 +66,68 @@ public class Warehouse {
         try {
             Product product = this.searchProduct(productId);
             if (product == null) {
-                response.put("status", "failure");
                 response.put("message", "Product not found");
                 return response;
             }
 
             Wishlist wishlist = this.getWishlist(clientId);
             if (wishlist == null) {
-                response.put("status", "failure");
                 response.put("message", "Client not found");
                 return response;
             }
 
-            WishlistItem item = wishlist.findItem(productId);
-
+            WishlistItem item = wishlist.findItem(clientId);
             if (item != null) {
                 item.updateQuantity(quantity);
-            }
-            else {
-                item = new WishlistItem(productId, quantity);
+            } else {
+                item = new WishlistItem(clientId, quantity);
                 wishlist.insertItem(item);
             }
 
             response.put("status", "success");
             response.put("current_quantity", item.getQuantity());
-        }
-        catch (Exception e) {
-            response.put("status", "failure");
+        } catch (Exception e) {
             response.put("message", e.getMessage());
         }
-
         return response;
+    }
+
+    // New methods for Receive Shipment
+    public String receiveShipment(String productId, int shipmentQuantity) {
+        Product product = this.searchProduct(productId);
+        if (product == null) {
+            return "Product not found.";
+        }
+
+        Waitlist waitlist = product.getWaitlist();
+        if (waitlist != null) {
+            Iterator<WaitlistItem> iterator = waitlist.getItems();
+            ArrayList<WaitlistItem> toRemove = new ArrayList<>();
+
+            while (iterator.hasNext() && shipmentQuantity > 0) {
+                WaitlistItem item = iterator.next();
+                int requestedQty = item.getQuantity();
+
+                if (requestedQty <= shipmentQuantity) {
+                    order(item.getClientId(), productId, requestedQty);
+                    shipmentQuantity -= requestedQty;
+                    toRemove.add(item);
+                }
+            }
+            for (WaitlistItem item : toRemove) {
+                waitlist.removeItem(item);
+            }
+        }
+
+        if (shipmentQuantity > 0) {
+            product.increaseQuantity(shipmentQuantity);
+            return "Shipment processed successfully. Remaining " + shipmentQuantity + " units added to inventory.";
+        } else {
+            return "Shipment processed. All quantity used to fulfill waitlists.";
+        }
+    }
+
+    public void order(String clientId, String productId, int quantity) {
+        // To be implemented later
     }
 }

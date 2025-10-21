@@ -22,43 +22,23 @@ public class Product {
         this.waitlist = new Waitlist();
     }
 
-    public String getId() {
-        return id;
+    public String getId() { return id; }
+    public String getName() { return name; }
+    public int getAmount() { return amount; }
+    public float getSalePrice() { return salePrice; }
+
+    public void setName(String name) { this.name = name; }
+    public void setAmount(int amount) { this.amount = amount; }
+    public void setsalePrice(float salePrice) { this.salePrice = salePrice; }
+
+    public Waitlist getWaitlist() { return this.waitlist; }
+
+    public void increaseQuantity(int quantity) {
+        this.amount += quantity;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public float getSalePrice() {
-
-        return salePrice;
-    }
-
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public void setsalePrice(float salePrice) {
-        this.salePrice = salePrice;
-    }
-
-    public Waitlist getWaitlist() {
-        return this.waitlist;
-    }
-
-   @Override
+    @Override
     public String toString() {
-        return String.format("Product[%s] %s, Quantity: %d, Price: $%.2f",
-                id, name, amount, salePrice);
+        return String.format("Product[%s] %s, Quantity: %d, Price: $%.2f", id, name, amount, salePrice);
     }
 }

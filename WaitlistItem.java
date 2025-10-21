@@ -16,7 +16,6 @@ public class WaitlistItem extends Item {
 
     @Override
     public String toString() {
-        return String.format("Client ID: %s, Quantity: %d",
-                clientId, quantity);
+        return String.format("Client ID: %s, Quantity: %d", clientId, quantity);
     }
 }
