@@ -93,20 +93,19 @@ public class Warehouse {
         return response;
     }
 
- // New methods for Receive Shipment
-public String receiveShipment(String productId, int shipmentQuantity) {
+ public String receiveShipment(String productId, int shipmentQuantity) {
     Product product = this.searchProduct(productId);
     if (product == null) {
         return "Product not found.";
     }
 
-System.out.println("Current stock for product '" + product.getName() + "' (ID: " 
-+ product.getId() + "): " + product.getAmount() + " units.");
+    
+    System.out.println("Current stock for product '" + product.getName() + "' (ID: " 
+        + product.getId() + "): " + product.getAmount() + " units.");
 
-System.out.println("Incoming shipment quantity: " + shipmentQuantity + " units.");
+    System.out.println("Incoming shipment quantity: " + shipmentQuantity + " units.");
 
-
-    // Add shipment stock first so order() has inventory to work with
+   
     product.updateQuantity(shipmentQuantity);
 
     Waitlist waitlist = product.getWaitlist();
@@ -118,41 +117,58 @@ System.out.println("Incoming shipment quantity: " + shipmentQuantity + " units."
             WaitlistItem item = iterator.next();
             int requestedQty = item.getQuantity();
             String clientId = item.getClientId();
+            Client client = searchClient(clientId); // Get client once here
+
+            if (client == null) continue; // safety
 
             if (requestedQty <= shipmentQuantity) {
-                // Full fulfillment: send all requested units
-                order(productId, requestedQty, clientId);
+                // Full fulfillment
+                InvoiceItem invoiceItem = order(productId, requestedQty, clientId);
                 shipmentQuantity -= requestedQty;
                 toRemove.add(item);
+
+                // 🔹 Create and attach invoice
+                if (invoiceItem != null) {
+                    Invoice invoice = new Invoice(clientId);
+                    invoice.addItem(invoiceItem);
+                    client.getInvoices().insertItem(invoice);
+                    System.out.println("Invoice created for client " + client.getName() +
+                                       " for " + requestedQty + " units of " + product.getName() + ".");
+                }
+
             } else if (shipmentQuantity > 0) {
-                // Partial fulfillment: send whatever’s available, update remaining waitlist qty
-                order(productId, shipmentQuantity, clientId);
+                // Partial fulfillment
+                InvoiceItem invoiceItem = order(productId, shipmentQuantity, clientId);
+
+                if (invoiceItem != null) {
+                    Invoice invoice = new Invoice(clientId);
+                    invoice.addItem(invoiceItem);
+                    client.getInvoices().insertItem(invoice);
+                    System.out.println("Partial invoice created for client " + client.getName() +
+                                       " for " + shipmentQuantity + " units of " + product.getName() + ".");
+                }
+
                 item.setQuantity(requestedQty - shipmentQuantity);
-                shipmentQuantity = 0; // all stock used
+                shipmentQuantity = 0; // used all available stock
             }
         }
 
-        // Remove all fully fulfilled waitlist items
+        // Remove fully fulfilled waitlist items
         for (WaitlistItem item : toRemove) {
             waitlist.removeItem(item);
         }
     }
 
-
-    
-    if (shipmentQuantity > 0) {
-        System.out.println("Remaining " 
-        + shipmentQuantity + " units added to inventory after waitlist processing.");
+        if (shipmentQuantity > 0) {
+        System.out.println("Remaining " + shipmentQuantity +
+    " units of '" + product.getName() + "' added to inventory after waitlist processing.");
     } else {
         System.out.println("All product quantity used to fulfill waitlists.");
     }
 
-
-
-    return "Shipment processed successfully. Current product stock: " + product.getAmount();
-
-
+    return "Shipment processed successfully. Stock of the current product: " + product.getAmount();
 }
+
 
 
 
