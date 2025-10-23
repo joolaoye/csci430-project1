@@ -22,6 +22,7 @@ public class UserInterface {
     private static final int ADD_TO_WISHLIST = 8;
     private static final int PROCESS_CLIENT_ORDER = 9;
     private static final int RECEIVE_SHIPMENT = 10;
+    private static final int RECEIVE_PAYMENT = 11;
 
     private UserInterface() {
         warehouse = Warehouse.instance();
@@ -76,6 +77,9 @@ public class UserInterface {
                 case RECEIVE_SHIPMENT:
                     receiveShipment();
                     break;
+                case RECEIVE_PAYMENT:
+                    receivePayment();
+                    break;
                 case EXIT:
                     System.out.println("Exiting the program.");
                     break;
@@ -97,6 +101,7 @@ public class UserInterface {
         System.out.println(ADD_TO_WISHLIST + " : Add Product to Client Wishlist");
         System.out.println(PROCESS_CLIENT_ORDER + " : Process Client Order");
         System.out.println(RECEIVE_SHIPMENT + " : Receive Shipment");
+        System.out.println(RECEIVE_PAYMENT + " : Receive Payment");
         System.out.println(EXIT + " : Exit");
     }
 
@@ -300,8 +305,6 @@ public class UserInterface {
 
     private void receiveShipment() {
         try {
-            System.out.print("Enter client ID: ");
-            //String clientId = reader.readLine().trim();
             System.out.print("Enter product ID: ");
             String productId = reader.readLine().trim();
             System.out.print("Enter shipment quantity: ");
@@ -314,5 +317,16 @@ public class UserInterface {
         }
     }
 
+    private void receivePayment() {
+        try {
+            System.out.print("Enter client ID: ");
+            String clientId = reader.readLine().trim();
+            System.out.print("Enter payment amount: ");
+            float payment = Float.parseFloat(reader.readLine());
 
+            warehouse.receivePayment(clientId, payment);
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Invalid input.");
+        }
+    }
 }
