@@ -20,8 +20,8 @@ public class UserInterface {
     private static final int GET_PRODUCTS = 6;
     private static final int GET_WISHLIST = 7;
     private static final int ADD_TO_WISHLIST = 8;
-    private static final int PROCESS_CLIENT_ORDER = 9; 
-    private static final int RECEIVE_SHIPMENT = 10; //New option
+    private static final int PROCESS_CLIENT_ORDER = 9;
+    private static final int RECEIVE_SHIPMENT = 10;
 
     private UserInterface() {
         warehouse = Warehouse.instance();
@@ -74,7 +74,7 @@ public class UserInterface {
                     processClientOrder();
                     break;
                 case RECEIVE_SHIPMENT:
-                    receiveShipment(); // New case
+                    receiveShipment();
                     break;
                 case EXIT:
                     System.out.println("Exiting the program.");
@@ -96,7 +96,7 @@ public class UserInterface {
         System.out.println(GET_WISHLIST + " : Get Client Wishlist");
         System.out.println(ADD_TO_WISHLIST + " : Add Product to Client Wishlist");
         System.out.println(PROCESS_CLIENT_ORDER + " : Process Client Order");
-        System.out.println(RECEIVE_SHIPMENT + " : Receive Shipment"); // New option
+        System.out.println(RECEIVE_SHIPMENT + " : Receive Shipment");
         System.out.println(EXIT + " : Exit");
     }
 
@@ -111,7 +111,7 @@ public class UserInterface {
         return command;
     }
 
-        private void addClient() {
+    private void addClient() {
         try {
             System.out.print("Enter client name: ");
             String name = reader.readLine().trim();
@@ -129,7 +129,7 @@ public class UserInterface {
         }
     }
 
-        private void addProduct() {
+    private void addProduct() {
         try {
             System.out.print("Enter product name: ");
             String name = reader.readLine().trim();
@@ -149,7 +149,7 @@ public class UserInterface {
         }
     }
 
-        private void searchClient() {
+    private void searchClient() {
         try {
             System.out.print("Enter client ID: ");
             String id = reader.readLine().trim();
@@ -164,7 +164,7 @@ public class UserInterface {
         }
     }
 
-        private void searchProduct() {
+    private void searchProduct() {
         try {
             System.out.print("Enter product ID: ");
             String id = reader.readLine().trim();
@@ -179,7 +179,7 @@ public class UserInterface {
         }
     }
 
-        private void getClients() {
+    private void getClients() {
         Iterator<Client> iterator = warehouse.getClients();
         if (!iterator.hasNext()) {
             System.out.println("No clients found.");
@@ -191,7 +191,7 @@ public class UserInterface {
         }
     }
 
-        private void getProducts() {
+    private void getProducts() {
         Iterator<Product> iterator = warehouse.getProducts();
         if (!iterator.hasNext()) {
             System.out.println("No products found.");
@@ -203,7 +203,7 @@ public class UserInterface {
         }
     }
 
-        private void getWishlist() {
+    private void getWishlist() {
         try {
             System.out.print("Enter client ID: ");
             String clientId = reader.readLine().trim();
@@ -228,7 +228,7 @@ public class UserInterface {
         }
     }
 
-private void addToWishlist() {
+    private void addToWishlist() {
         try {
             System.out.print("Enter client ID: ");
             String clientId = reader.readLine().trim();
@@ -298,11 +298,10 @@ private void addToWishlist() {
         }
     }
 
-
-     private void receiveShipment()  {
-     try {
+    private void receiveShipment() {
+        try {
             System.out.print("Enter client ID: ");
-            String clientId = reader.readLine().trim();
+            //String clientId = reader.readLine().trim();
             System.out.print("Enter product ID: ");
             String productId = reader.readLine().trim();
             System.out.print("Enter shipment quantity: ");
@@ -314,6 +313,6 @@ private void addToWishlist() {
             System.out.println("Invalid input.");
         }
     }
-      
+
 
 }
