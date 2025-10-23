@@ -111,7 +111,99 @@ public class UserInterface {
         return command;
     }
 
-    private void receiveShipment() {
+        private void addClient() {
+        try {
+            System.out.print("Enter client name: ");
+            String name = reader.readLine().trim();
+            System.out.print("Enter client address: ");
+            String address = reader.readLine().trim();
+
+            Client client = warehouse.addClient(name, address);
+            if (client != null) {
+                System.out.println("Client added successfully! ID: " + client.getId());
+            } else {
+                System.out.println("Failed to add client.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading input.");
+        }
+    }
+
+        private void addProduct() {
+        try {
+            System.out.print("Enter product name: ");
+            String name = reader.readLine().trim();
+            System.out.print("Enter product price: ");
+            float price = Float.parseFloat(reader.readLine());
+            System.out.print("Enter product quantity: ");
+            int quantity = Integer.parseInt(reader.readLine());
+
+            Product product = warehouse.addProduct(name, price, quantity);
+            if (product != null) {
+                System.out.println("Product added successfully! ID: " + product.getId());
+            } else {
+                System.out.println("Failed to add product.");
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Invalid input.");
+        }
+    }
+
+        private void searchClient() {
+        try {
+            System.out.print("Enter client ID: ");
+            String id = reader.readLine().trim();
+            Client client = warehouse.searchClient(id);
+            if (client != null) {
+                System.out.println("Client found: " + client);
+            } else {
+                System.out.println("Client not found.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading input.");
+        }
+    }
+
+        private void searchProduct() {
+        try {
+            System.out.print("Enter product ID: ");
+            String id = reader.readLine().trim();
+            Product product = warehouse.searchProduct(id);
+            if (product != null) {
+                System.out.println("Product found: " + product);
+            } else {
+                System.out.println("Product not found.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading input.");
+        }
+    }
+
+        private void getClients() {
+        Iterator<Client> iterator = warehouse.getClients();
+        if (!iterator.hasNext()) {
+            System.out.println("No clients found.");
+            return;
+        }
+        System.out.println("--- Clients List ---");
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+    }
+
+        private void getProducts() {
+        Iterator<Product> iterator = warehouse.getProducts();
+        if (!iterator.hasNext()) {
+            System.out.println("No products found.");
+            return;
+        }
+        System.out.println("--- Products List ---");
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+    }
+
+        private void getWishlist() {
         try {
             System.out.print("Enter client ID: ");
             String clientId = reader.readLine().trim();
@@ -135,6 +227,7 @@ public class UserInterface {
             System.out.println("Error reading input.");
         }
     }
+
 
     private void addToWishlist() {
         try {
@@ -202,3 +295,28 @@ public class UserInterface {
         }
     }
 }
+
+    private void receiveShipment() {
+        try {
+            System.out.print("Enter client ID: ");
+            String clientId = reader.readLine().trim();
+            Wishlist wishlist = warehouse.getWishlist(clientId);
+
+            if (wishlist == null || !(wishlist.getItems().hasNext())) {
+                System.out.println("Wishlist is empty or client not found.");
+                return;
+            }
+
+            System.out.println("--- Wishlist ---");
+
+            Iterator<WishlistItem> it  = wishlist.getItems();
+
+            while (it.hasNext()) {
+                Item item = it.next();
+                System.out.println(item);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error reading input.");
+        }
+    }
