@@ -128,7 +128,6 @@ public class Warehouse {
         }
     }
 
-   
     public InvoiceItem order(String productId, int quantity, String clientId) {
         Product product = this.searchProduct(productId);
         Client client = this.searchClient(clientId);
@@ -139,8 +138,10 @@ public class Warehouse {
             product.updateQuantity(-product.getAmount());
             float cost = product.getAmount() * product.getSalePrice();
             client.updateBalance(cost);
-
-            // Add the remaining quantity to the product's waitlist
+            int extra = quantity - product.getAmount();
+            WaitlistItem waitlistItem = new WaitlistItem(clientId, extra);
+            Waitlist product_waitlist = product.getWaitlist();
+            product_waitlist.insertItem(waitlistItem);
         } else {
             invoiceItem = new InvoiceItem(quantity, product.getName(), product.getSalePrice());
             product.updateQuantity(-quantity);
