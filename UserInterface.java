@@ -294,7 +294,7 @@ public class UserInterface {
             System.out.println("Invalid input.");
         }
     }
-}
+
 
     private void receiveShipment() {
         try {
@@ -320,3 +320,5 @@ public class UserInterface {
             System.out.println("Error reading input.");
         }
     }
+
+}
