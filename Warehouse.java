@@ -128,20 +128,33 @@ public class Warehouse {
         }
     }
 
+    public Waitlist getWaitlist(String productId) {
+        Product product = this.searchProduct(productId);
+        return product.getWaitlist();
+    }
+
     public InvoiceItem order(String productId, int quantity, String clientId) {
         Product product = this.searchProduct(productId);
         Client client = this.searchClient(clientId);
         InvoiceItem invoiceItem = null;
+        int available = product.getAmount();
 
-        if (quantity > product.getAmount()) {
-            invoiceItem = new InvoiceItem(product.getAmount(), product.getName(), product.getSalePrice());
-            product.updateQuantity(-product.getAmount());
-            float cost = product.getAmount() * product.getSalePrice();
+        if (quantity > available) {
+            invoiceItem = new InvoiceItem(available, product.getName(), product.getSalePrice());
+            float cost = available * product.getSalePrice();
             client.updateBalance(cost);
-            int extra = quantity - product.getAmount();
-            WaitlistItem waitlistItem = new WaitlistItem(clientId, extra);
+            int extra = quantity - available;
+            product.updateQuantity(-available);
             Waitlist product_waitlist = product.getWaitlist();
-            product_waitlist.insertItem(waitlistItem);
+            
+            WaitlistItem item = product_waitlist.findItem(clientId);
+
+            if (item == null) {
+                WaitlistItem waitlistItem = new WaitlistItem(clientId, extra);
+                product_waitlist.insertItem(waitlistItem);
+            } else {
+                item.updateQuantity(extra);
+            }
         } else {
             invoiceItem = new InvoiceItem(quantity, product.getName(), product.getSalePrice());
             product.updateQuantity(-quantity);

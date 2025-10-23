@@ -23,6 +23,7 @@ public class UserInterface {
     private static final int PROCESS_CLIENT_ORDER = 9;
     private static final int RECEIVE_SHIPMENT = 10;
     private static final int RECEIVE_PAYMENT = 11;
+    private static final int GET_WAITLIST = 12; 
 
     private UserInterface() {
         warehouse = Warehouse.instance();
@@ -80,6 +81,9 @@ public class UserInterface {
                 case RECEIVE_PAYMENT:
                     receivePayment();
                     break;
+                case GET_WAITLIST:
+                    getWaitlist();
+                    break;
                 case EXIT:
                     System.out.println("Exiting the program.");
                     break;
@@ -102,6 +106,7 @@ public class UserInterface {
         System.out.println(PROCESS_CLIENT_ORDER + " : Process Client Order");
         System.out.println(RECEIVE_SHIPMENT + " : Receive Shipment");
         System.out.println(RECEIVE_PAYMENT + " : Receive Payment");
+        System.out.println(GET_WAITLIST + " : Get Waitlist");
         System.out.println(EXIT + " : Exit");
     }
 
@@ -327,6 +332,31 @@ public class UserInterface {
             warehouse.receivePayment(clientId, payment);
         } catch (IOException | NumberFormatException e) {
             System.out.println("Invalid input.");
+        }
+    }
+
+    private void getWaitlist() {
+        try {
+            System.out.print("Enter product ID: ");
+            String productId = reader.readLine().trim();
+            Waitlist waitlist = warehouse.getWaitlist(productId);
+
+            if (waitlist == null || !(waitlist.getItems().hasNext())) {
+                System.out.println("Wishlist is empty or client not found.");
+                return;
+            }
+
+            System.out.println("--- Waitlist ---");
+
+            Iterator<WaitlistItem> it  = waitlist.getItems();
+
+            while (it.hasNext()) {
+                Item item = it.next();
+                System.out.println(item);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error reading input.");
         }
     }
 }
