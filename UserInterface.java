@@ -70,11 +70,11 @@ public class UserInterface {
                 case ADD_TO_WISHLIST:
                     addToWishlist();
                     break;
-                case RECEIVE_SHIPMENT:
-                    receiveShipment(); // New case
-                    break;
                 case PROCESS_CLIENT_ORDER:
                     processClientOrder();
+                    break;
+                case RECEIVE_SHIPMENT:
+                    receiveShipment(); // New case
                     break;
                 case EXIT:
                     System.out.println("Exiting the program.");
@@ -95,8 +95,8 @@ public class UserInterface {
         System.out.println(GET_PRODUCTS + " : Get All Products");
         System.out.println(GET_WISHLIST + " : Get Client Wishlist");
         System.out.println(ADD_TO_WISHLIST + " : Add Product to Client Wishlist");
-        System.out.println(RECEIVE_SHIPMENT + " : Receive Shipment"); // New option
         System.out.println(PROCESS_CLIENT_ORDER + " : Process Client Order");
+        System.out.println(RECEIVE_SHIPMENT + " : Receive Shipment"); // New option
         System.out.println(EXIT + " : Exit");
     }
 
@@ -228,18 +228,21 @@ public class UserInterface {
         }
     }
 
-
-    private void addToWishlist() {
+private void addToWishlist() {
         try {
             System.out.print("Enter client ID: ");
             String clientId = reader.readLine().trim();
             System.out.print("Enter product ID: ");
             String productId = reader.readLine().trim();
-            System.out.print("Enter shipment quantity: ");
+            System.out.print("Enter quantity: ");
             int quantity = Integer.parseInt(reader.readLine());
 
-            String result = warehouse.receiveShipment(productId, quantity);
-            System.out.println(result);
+            Map<String, Object> response = warehouse.addToWishlist(productId, quantity, clientId);
+            if (response.get("status").equals("success")) {
+                System.out.println("Added to wishlist. Current quantity: " + response.get("current_quantity"));
+            } else {
+                System.out.println("Failed to add to wishlist: " + response.get("message"));
+            }
         } catch (IOException | NumberFormatException e) {
             System.out.println("Invalid input.");
         }
@@ -296,29 +299,21 @@ public class UserInterface {
     }
 
 
-    private void receiveShipment() {
-        try {
+     private void receiveShipment()  {
+     try {
             System.out.print("Enter client ID: ");
             String clientId = reader.readLine().trim();
-            Wishlist wishlist = warehouse.getWishlist(clientId);
+            System.out.print("Enter product ID: ");
+            String productId = reader.readLine().trim();
+            System.out.print("Enter shipment quantity: ");
+            int quantity = Integer.parseInt(reader.readLine());
 
-            if (wishlist == null || !(wishlist.getItems().hasNext())) {
-                System.out.println("Wishlist is empty or client not found.");
-                return;
-            }
-
-            System.out.println("--- Wishlist ---");
-
-            Iterator<WishlistItem> it  = wishlist.getItems();
-
-            while (it.hasNext()) {
-                Item item = it.next();
-                System.out.println(item);
-            }
-
-        } catch (IOException e) {
-            System.out.println("Error reading input.");
+            String result = warehouse.receiveShipment(productId, quantity);
+            System.out.println(result);
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Invalid input.");
         }
     }
+      
 
 }
