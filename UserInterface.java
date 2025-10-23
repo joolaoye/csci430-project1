@@ -24,6 +24,7 @@ public class UserInterface {
     private static final int RECEIVE_SHIPMENT = 10;
     private static final int RECEIVE_PAYMENT = 11;
     private static final int GET_WAITLIST = 12; 
+    private static final int GET_INVOICES = 13;
 
     private UserInterface() {
         warehouse = Warehouse.instance();
@@ -84,6 +85,9 @@ public class UserInterface {
                 case GET_WAITLIST:
                     getWaitlist();
                     break;
+                case GET_INVOICES:
+                    getInvoices();
+                    break;
                 case EXIT:
                     System.out.println("Exiting the program.");
                     break;
@@ -107,6 +111,7 @@ public class UserInterface {
         System.out.println(RECEIVE_SHIPMENT + " : Receive Shipment");
         System.out.println(RECEIVE_PAYMENT + " : Receive Payment");
         System.out.println(GET_WAITLIST + " : Get Waitlist");
+        System.out.println(GET_INVOICES + " : Get Invoices");
         System.out.println(EXIT + " : Exit");
     }
 
@@ -264,43 +269,46 @@ public class UserInterface {
             String clientId = reader.readLine().trim();
 
             Client client = warehouse.searchClient(clientId);
-            Invoice invoice = new Invoice(clientId);
 
-            if (client != null) {
-                Wishlist wishlist = client.getWishlist();
-                Iterator<WishlistItem> iterator = wishlist.getItems();
-                if (!iterator.hasNext()) {
-                    System.out.println("Wishlist is empty");
-                    return;
-                }
-                System.out.println(("--- Wishlist Items ---"));
-                while (iterator.hasNext()) {
-                    WishlistItem item = iterator.next();
-                    System.out.println(item);
-                    System.out.println("Purchase / Remove / Leave");
-                    System.out.print("Enter response: ");
-                    String response = reader.readLine().trim();
-
-                    switch (response) {
-                        case PURCHASE:
-                            System.out.print("Enter quantity to be ordered: ");
-                            int quantity = Integer.parseInt(reader.readLine());
-                            InvoiceItem invoiceItem = warehouse.order(item.getProductId(), quantity, clientId);
-                            invoice.addItem(invoiceItem);
-                            iterator.remove();
-                            break;
-                        case REMOVE:
-                            iterator.remove();
-                            break;
-                        case LEAVE:
-                            break;
-                    }
-                }
-            } else {
+            if (client == null) {
                 System.out.println("Client not found. Exit");
                 return;
             }
 
+            InvoiceList client_invoices = client.getInvoices();
+            Invoice invoice = new Invoice(clientId);
+
+            Wishlist wishlist = client.getWishlist();
+            Iterator<WishlistItem> iterator = wishlist.getItems();
+            if (!iterator.hasNext()) {
+                System.out.println("Wishlist is empty");
+                return;
+            }
+            System.out.println(("--- Wishlist Items ---"));
+            while (iterator.hasNext()) {
+                WishlistItem item = iterator.next();
+                System.out.println(item);
+                System.out.println("Purchase / Remove / Leave");
+                System.out.print("Enter response: ");
+                String response = reader.readLine().trim();
+
+                switch (response) {
+                    case PURCHASE:
+                        System.out.print("Enter quantity to be ordered: ");
+                        int quantity = Integer.parseInt(reader.readLine());
+                        InvoiceItem invoiceItem = warehouse.order(item.getProductId(), quantity, clientId);
+                        invoice.addItem(invoiceItem);
+                        iterator.remove();
+                        break;
+                    case REMOVE:
+                        iterator.remove();
+                        break;
+                    case LEAVE:
+                        break;
+                }
+            }
+            
+            client_invoices.insertItem(invoice);
             System.out.println(invoice.render());
         
         } catch (IOException | NumberFormatException e) {
@@ -342,7 +350,7 @@ public class UserInterface {
             Waitlist waitlist = warehouse.getWaitlist(productId);
 
             if (waitlist == null || !(waitlist.getItems().hasNext())) {
-                System.out.println("Wishlist is empty or client not found.");
+                System.out.println("Waitlist is empty or client not found.");
                 return;
             }
 
@@ -353,6 +361,31 @@ public class UserInterface {
             while (it.hasNext()) {
                 Item item = it.next();
                 System.out.println(item);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error reading input.");
+        }
+    }
+
+    private void getInvoices() {
+        try {
+            System.out.print("Enter client ID: ");
+            String clientId = reader.readLine().trim();
+            InvoiceList invoices = warehouse.getInvoices(clientId);
+
+            if (invoices == null || !(invoices.getItems().hasNext())) {
+                System.out.println("Client does not have any invoice.");
+                return;
+            }
+
+            System.out.println("--- Invoices ---");
+
+            Iterator<Invoice> it  = invoices.getItems();
+
+            while (it.hasNext()) {
+                Invoice item = it.next();
+                System.out.println(item.render());
             }
 
         } catch (IOException e) {

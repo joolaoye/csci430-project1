@@ -175,4 +175,9 @@ public class Warehouse {
             System.out.println("Client not found.");
         }
     }
+
+    public InvoiceList getInvoices(String clientId) {
+        Client client = this.searchClient(clientId);
+        return client.getInvoices();
+    }
 }

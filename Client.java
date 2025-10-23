@@ -13,7 +13,7 @@ public class Client {
     private String address;
     private double balance;
     private Wishlist wishlist;
-    private ArrayList<Item> transactions;
+    private InvoiceList invoices;
 
     public Client(String name, String address) {
         this.id = UUID.randomUUID().toString();
@@ -21,7 +21,7 @@ public class Client {
         this.address = address;
         this.balance = 0.0;
         this.wishlist = new Wishlist();
-        this.transactions = new ArrayList<Item>();
+        this.invoices = new InvoiceList();
     }
 
     public String getId() {
@@ -65,8 +65,8 @@ public class Client {
         return this.wishlist;
     }
 
-    public ArrayList<Item> getTransactions() {
-        return this.transactions;
+    public InvoiceList getInvoices() {
+        return this.invoices;
     }
 
     @Override
