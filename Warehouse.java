@@ -93,40 +93,68 @@ public class Warehouse {
         return response;
     }
 
-    // New methods for Receive Shipment
-    public String receiveShipment(String productId, int shipmentQuantity) {
-        Product product = this.searchProduct(productId);
-        if (product == null) {
-            return "Product not found.";
+ // New methods for Receive Shipment
+public String receiveShipment(String productId, int shipmentQuantity) {
+    Product product = this.searchProduct(productId);
+    if (product == null) {
+        return "Product not found.";
+    }
+
+System.out.println("Current stock for product '" + product.getName() + "' (ID: " 
++ product.getId() + "): " + product.getAmount() + " units.");
+
+System.out.println("Incoming shipment quantity: " + shipmentQuantity + " units.");
+
+
+    // Add shipment stock first so order() has inventory to work with
+    product.updateQuantity(shipmentQuantity);
+
+    Waitlist waitlist = product.getWaitlist();
+    if (waitlist != null) {
+        Iterator<WaitlistItem> iterator = waitlist.getItems();
+        ArrayList<WaitlistItem> toRemove = new ArrayList<>();
+
+        while (iterator.hasNext() && shipmentQuantity > 0) {
+            WaitlistItem item = iterator.next();
+            int requestedQty = item.getQuantity();
+            String clientId = item.getClientId();
+
+            if (requestedQty <= shipmentQuantity) {
+                // Full fulfillment: send all requested units
+                order(productId, requestedQty, clientId);
+                shipmentQuantity -= requestedQty;
+                toRemove.add(item);
+            } else if (shipmentQuantity > 0) {
+                // Partial fulfillment: send whatever’s available, update remaining waitlist qty
+                order(productId, shipmentQuantity, clientId);
+                item.setQuantity(requestedQty - shipmentQuantity);
+                shipmentQuantity = 0; // all stock used
+            }
         }
 
-        Waitlist waitlist = product.getWaitlist();
-        if (waitlist != null) {
-            Iterator<WaitlistItem> iterator = waitlist.getItems();
-            ArrayList<WaitlistItem> toRemove = new ArrayList<>();
-
-            while (iterator.hasNext() && shipmentQuantity > 0) {
-                WaitlistItem item = iterator.next();
-                int requestedQty = item.getQuantity();
-
-                if (requestedQty <= shipmentQuantity) {
-                    order(productId, requestedQty, item.getClientId());
-                    shipmentQuantity -= requestedQty;
-                    toRemove.add(item);
-                }
-            }
-            for (WaitlistItem item : toRemove) {
-                waitlist.removeItem(item);
-            }
-        }
-
-        if (shipmentQuantity > 0) {
-            product.updateQuantity(shipmentQuantity);
-            return "Shipment processed successfully. Remaining " + shipmentQuantity + " units added to inventory.";
-        } else {
-            return "Shipment processed. All quantity used to fulfill waitlists.";
+        // Remove all fully fulfilled waitlist items
+        for (WaitlistItem item : toRemove) {
+            waitlist.removeItem(item);
         }
     }
+
+
+    
+    if (shipmentQuantity > 0) {
+        System.out.println("Remaining " 
+        + shipmentQuantity + " units added to inventory after waitlist processing.");
+    } else {
+        System.out.println("All product quantity used to fulfill waitlists.");
+    }
+
+
+
+    return "Shipment processed successfully. Current product stock: " + product.getAmount();
+
+
+}
+
+
 
     public Waitlist getWaitlist(String productId) {
         Product product = this.searchProduct(productId);
