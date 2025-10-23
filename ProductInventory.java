@@ -46,7 +46,7 @@ public class ProductInventory {
     public void updateProductQuantity(String productId, int additionalQuantity) {
         Product product = searchProduct(productId);
         if (product != null) {
-            product.increaseQuantity(additionalQuantity);
+            product.updateQuantity(additionalQuantity);
         }
     }
 }

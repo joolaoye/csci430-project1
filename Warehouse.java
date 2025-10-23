@@ -110,7 +110,7 @@ public class Warehouse {
                 int requestedQty = item.getQuantity();
 
                 if (requestedQty <= shipmentQuantity) {
-                    order(item.getClientId(), productId, requestedQty);
+                    order(productId, requestedQty, item.getClientId());
                     shipmentQuantity -= requestedQty;
                     toRemove.add(item);
                 }
@@ -121,7 +121,7 @@ public class Warehouse {
         }
 
         if (shipmentQuantity > 0) {
-            product.increaseQuantity(shipmentQuantity);
+            product.updateQuantity(shipmentQuantity);
             return "Shipment processed successfully. Remaining " + shipmentQuantity + " units added to inventory.";
         } else {
             return "Shipment processed. All quantity used to fulfill waitlists.";
@@ -143,6 +143,7 @@ public class Warehouse {
         }
 
         return invoiceItem;
+    }
     
     public void receivePayment(String clientId, double amount) {
         Client client = clients.searchClient(clientId);
